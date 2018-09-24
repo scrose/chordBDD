@@ -17,6 +17,8 @@
 package main
 
 import (
+	"fmt"
+	"math/rand"
 	"sync"
 )
 
@@ -26,24 +28,24 @@ import (
 func agent (tobacco chan string, paper chan string, matches chan string, loop chan bool, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for {
-		for i := 1; i <= 3; i++ {
-			switch i {
-			case 1:
-				// Agent puts out tobacco and paper
-				tobacco <- "tobacco"
-				paper <- "paper"
-			case 2:
-				// Agent puts out paper and matches
-				paper <- "paper"
-				matches <- "matches"
-			case 3:
-				// Agent puts out tobacco and matches
-				tobacco <- "tobacco"
-				matches <- "matches"
-			}
-			// Wait for a smoker to finish, then loop
-			<-loop
+		i := rand.Intn(3) + 1
+		fmt.Printf("Case: %d\n", i)
+		switch i {
+		case 1:
+			// Agent puts out tobacco and paper
+			tobacco <- "tobacco"
+			paper <- "paper"
+		case 2:
+			// Agent puts out paper and matches
+			paper <- "paper"
+			matches <- "matches"
+		case 3:
+			// Agent puts out tobacco and matches
+			tobacco <- "tobacco"
+			matches <- "matches"
 		}
+		// Wait for a smoker to finish, then loop
+		<-loop
 	}
 }
 
