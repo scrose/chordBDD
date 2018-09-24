@@ -7,83 +7,93 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"sync"
-	"math/rand"
+	"time"
 )
 
-func cross(i int, dir int) {
-	fmt.Printf("baboon %d crossing %s!", i, dir)
-	return
+type Rope struct {
+	resp chan int
+}
+
+// baboon thread routine
+func baboon(i int, wg *sync.WaitGroup, dirCh chan Rope, actionCh chan int) {
+	defer wg.Done()
+	resp := make(chan int)
+
+	// send request for the rope
+	dirCh <- Rope{resp}
+	log.Printf("Baboon %d is ready to cross...\n", i)
+	<-resp
+	log.Printf("Baboon %d is crossing.\n", i)
+	time.Sleep(time.Second)
+	actionCh <- i
 }
 
 func main() {
-	var n = 12
-	var crossing = 0
-	dir[0] = "west"
-	dir[1] = "east"
-
-	var mutex = &sync.Mutex{}
+	var n = 3
 
 	// Waiting group for baboon threads
 	var wg sync.WaitGroup
 
-	// channel represents current crossing direction
-	dirCh := make(chan int, 5)
+	// channels represent crossing direction and state
+	westCh := make(chan Rope)
+	eastCh := make(chan Rope)
+	actionCh := make(chan int)
 
-	// Launch n baboon threads
+	// Launch 2n baboon threads
 	for i := 1; i <= n; i++ {
-		wg.Add(1)
-		// direction east = 0; west = 1
-		d := rand.Intn(1)
-		fmt.Printf("baboon %d goes in direction: %d\n", i, dir[d])
+		wg.Add(2)
 
-			go func() {
-				// get ready to cross
-				<- start
-				// check direction of crossing
-				for {
-					if (d == 0) {
-						<- eastDir
-					}
-					else {
-						<- westDir
-					}
-					// check number of baboons crossing
-					mutex.Lock()
-					if crossing < 5 {
-						crossing++
-						// signal direction crossing
-						if (d == 0) {
-							eastDir <- i
-						}
-						else {
-							westDir <- i
-						}
-					}
-					mutex.Unlock()
+		go baboon(i, &wg, eastCh, actionCh)
+		//go baboon(i*10, &wg, westCh, actionCh)
+	}
 
-				}
-			}()
+	// Launch rope thread
+	// go func() {
+		//wg.Add(1)
+		var dir = ""
+		var crossing = 0
 
-				// Launch "rope" thread
-
-
-
+		// loop
+		log.Println("Waiting for a baboon.")
+		for {
+			log.Println("loop!")
+			// check number and direction of baboons crossing
+				// wait for baboon to start/finish crossing
 				select {
-				case cross := <- dirCh:
-					<-done
-					fmt.Printf("Haircut done. Customer #%d leaves\n", c)
-				default:
-					fmt.Printf("No seats! Customer #%d leaves\n", c)
+				case b := <-eastCh:
+					if crossing < 5 && (dir == "east" || dir == "") {
+						crossing++
+						dir = "east"
+						b.resp <- 1
+					}
+
+
+				case b := <-westCh:
+					if crossing < 5 && (dir == "west" || dir == "") {
+						crossing++
+						dir = "west"
+						b.resp <- 1
+					}
+
+				case b := <-actionCh:
+					log.Printf("Baboon %d finished crossing %s.\n", b, dir)
+					crossing--
+					if crossing == 0 {
+						dir = ""
+						log.Println("Waiting for a baboon.")
+					}
+
 				}
+			wg.Wait()
+
+		}
+	//}()
+	close(eastCh)
+	close(westCh)
+	close(actionCh)
 
 
-
-  }
-	close(start)
-
-
-	wg.Wait()
-	close(direction)
 }
+
