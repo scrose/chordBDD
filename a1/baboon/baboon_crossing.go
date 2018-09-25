@@ -1,8 +1,11 @@
-// =========================================
-// Example 4: Baboon Crossing Problem (Exercise 6.3)
-// =========================================
-// Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
-// Spencer Rose (ID V00124060)
+/*
+=========================================
+Example 4: Baboon Crossing Problem (Exercise 6.3
+=========================================
+Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
+Spencer Rose (ID V00124060)
+
+*/
 
 package main
 

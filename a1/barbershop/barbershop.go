@@ -1,8 +1,20 @@
-// =========================================
-// Example 1: The Barbershop Problem (Exercise 5.2)
-// =========================================
-// Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
-// Spencer Rose (ID V00124060)
+/*
+=========================================
+Example 2: The Barbershop Problem (Exercise 5.2)
+=========================================
+Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
+Spencer Rose (ID V00124060)
+=========================================
+SUMMARY: A barbershop consists of a waiting room with n chairs, and the barber room
+containing the barber chair. If there are no customers to be served, the barber goes
+to sleep. If a customer enters the barbershop and all chairs are occupied, then the
+customer leaves the shop. If the barber is busy, but chairs are available, then the
+customer sits in one of the free chairs. If the barber is asleep, the customer wakes
+up the barber. Write a program to coordinate the barber and the customers.
+
+References
+Downey, Allen B., The Little Book of Semaphores,  Version 2.2.1, pp 101-111.
+*/
 
 package main
 

@@ -3,6 +3,17 @@
 // =========================================
 // Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
 // Spencer Rose (ID V00124060)
+// =========================================
+// SUMMARY: Four threads are involved: an agent and three smokers. The smokers loop
+// forever, first waiting for ingredients, then making and smoking cigarettes. The
+// ingredients are tobacco, paper, and matches. We assume that the agent has an infinite
+// supply of all three ingredients, and each smoker has an infinite supply of one of the
+// ingredients; that is, one smoker has matches, another has paper, and the third has
+// tobacco. The agent repeatedly chooses two different ingredients at random and makes
+// them available to the smokers. Depending on which ingredients are chosen, the smoker
+// with the complementary ingredient should pick up both resources and proceed.
+// Reference: Downey, Allen B., The Little Book of Semaphores,  Version 2.2.1, pp 101-111.
+//
 // Code modelled on examples given in Go in 5 Minutes blog:
 // https://www.goin5minutes.com/blog/channel_over_channel/
 
@@ -22,10 +33,10 @@ func oxygen(o int, wg *sync.WaitGroup, bondCh chan chan int) {
 	h2 := <-bondCh
 	// Confirm request on received channels
 	h1 <- o
-	 h1_b := <- h1
+	h1B := <- h1
 	h2 <- o
-	 h2_b := <- h2
-	 bond(h1_b, h2_b, o)
+	h2B := <- h2
+	bond(h1B, h2B, o)
 	//bond(1,2,o)
 }
 

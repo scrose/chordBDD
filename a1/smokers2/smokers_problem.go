@@ -17,7 +17,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"sync"
 )
@@ -28,8 +27,8 @@ import (
 func agent (tobacco chan string, paper chan string, matches chan string, loop chan bool, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for {
+		// Simulate random selection of two different ingredients
 		i := rand.Intn(3) + 1
-		fmt.Printf("Case: %d\n", i)
 		switch i {
 		case 1:
 			// Agent puts out tobacco and paper
@@ -49,9 +48,10 @@ func agent (tobacco chan string, paper chan string, matches chan string, loop ch
 	}
 }
 
+// Loop to simulate smoker waiting for two needed ingredients
 func waitForIngredients(ingr1Ch chan string, ingr2Ch chan string, loop chan bool) {
 	for {
-		// Smoker waits for other two ingredients
+		// Check if either needed ingredient is available from the agent
 		select {
 		case ingr1 := <-ingr1Ch:
 			// Needed ingredient acquired; acquire third ingredient
