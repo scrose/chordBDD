@@ -40,7 +40,7 @@ type smokerTypes struct {
 
 // The agent thread repeatedly chooses two different ingredients at random and makes
 // them available to the smokers (via the helper).
-func agent2 (ingCh chan ingredientTypes, signal chan bool, wg *sync.WaitGroup) {
+func agent(ingCh chan ingredientTypes, signal chan bool, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for {
 		// Generate random selection of ingredients
@@ -68,7 +68,7 @@ func agent2 (ingCh chan ingredientTypes, signal chan bool, wg *sync.WaitGroup) {
 }
 
 // Helper transfer ingredients pushed by agent to correct smoker
-func helper (ingCh chan ingredientTypes, smokers smokerTypes, signal chan bool, wg *sync.WaitGroup) {
+func helper(ingCh chan ingredientTypes, smokers smokerTypes, signal chan bool, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
@@ -121,7 +121,7 @@ func main() {
 	wg.Add(5)
 
 	// Agent thread
-	go agent2(ingredients, signal, &wg)
+	go agent(ingredients, signal, &wg)
 
 	// Helper (Pusher) thread
 	go helper(ingredients, smokers, signal, &wg)

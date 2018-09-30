@@ -15,6 +15,38 @@
 #include <time.h>
 #include "queue.h"
 
+/*
+   -------------------------------------------
+   data structures
+*/
+typedef struct turnstile turnstile;
+struct turnstile {
+     int d; /* number of deleters */
+     int s; /* number of searchers */
+
+     pthread_t *tid; /* thread array */
+     pthread_attr_t attr; /* thread attribute */
+
+     /* turnstile mutex & condition variables */
+     pthread_mutex_t mtx_turnstile;
+     pthread_condattr_t cond_turnstile_attr;
+     pthread_cond_t cond_turnstile_ready;
+};
+
+typedef struct linkedlist linkedlist;
+struct linkedlist {
+     int d; /* number of deleters */
+     int s; /* number of searchers */
+
+     pthread_t *tid; /* thread array */
+     pthread_attr_t attr; /* thread attribute */
+
+     /* turnstile mutex & condition variables */
+     pthread_mutex_t mtx_station;
+     pthread_condattr_t cond_station_attr;
+     pthread_cond_t cond_train_ready;
+};
+
 // Pthread routines
 void searcher(list **, int);
 void inserter(list **, int);
