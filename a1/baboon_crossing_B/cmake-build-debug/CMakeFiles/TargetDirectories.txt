@@ -1,0 +1,3 @@
+/Users/boutrous/Workspace/Go/src/github.com/scrose/csc564/a1/baboon_crossing_B/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/boutrous/Workspace/Go/src/github.com/scrose/csc564/a1/baboon_crossing_B/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/boutrous/Workspace/Go/src/github.com/scrose/csc564/a1/baboon_crossing_B/cmake-build-debug/CMakeFiles/baboon_crossing_B.dir
