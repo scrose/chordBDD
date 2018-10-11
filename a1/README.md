@@ -1,9 +1,6 @@
 CSC546 Concurrency (Fall 2018)
 Assignment 1
 Prof. Yvonne Coady
-
-
-Spencer Rose (V00124060)
 October 11, 2018
 
 
