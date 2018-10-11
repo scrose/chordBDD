@@ -4,7 +4,7 @@
  * Implementation B
  * =========================================
  * Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
- * Spencer Rose (ID V00124060)
+ * Author: Spencer Rose
  * =========================================
  * SUMMARY: A barbershop consists of a waiting room with n chairs, and the barber room
  * containing the barber chair. If there are no customers to be served, the barber goes

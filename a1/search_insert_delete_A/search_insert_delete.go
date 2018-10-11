@@ -3,7 +3,7 @@
 Example 5: The Search-Insert-Delete Problem (Exercise 6.1, pp. 165-169)
 =========================================
 Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
-Spencer Rose (ID V00124060)
+Author: Spencer Rose
 
 SUMMARY: Three kinds of threads share access to a singly-linked list: searchers,
 inserters and deleters. Searchers merely examine the list; hence they can execute

@@ -3,7 +3,7 @@
 Example 1: Cigarette Smokers Problem (Exercise 4.5)
 =========================================
 Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
-Spencer Rose (ID V00124060)
+Author: Spencer Rose
 =========================================
 SUMMARY: Four threads are involved: an agent and three smokers. The smokers loop
 forever, first waiting for ingredients, then making and smoking cigarettes. The

@@ -10,7 +10,7 @@ without running into a baboon going the other way. There are never more than 5
 baboons on the rope.
 
 Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
-Spencer Rose (ID V00124060)
+Author: Spencer Rose
 
 */
 

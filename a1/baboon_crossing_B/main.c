@@ -4,7 +4,7 @@
  * Implementation B
  * =========================================
  * Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
- * Spencer Rose (ID V00124060)
+ * Author: Spencer Rose
  *
  * SUMMARY: There is a deep canyon and a single rope that spans the canyon. Baboons
  * can cross the canyon by swinging on the rope, but if two baboons going in

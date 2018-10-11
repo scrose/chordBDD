@@ -3,7 +3,7 @@
    Example 2: The Search-Insert-Delete Problem (Exercise 6.1)
    =========================================
    Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
-   Spencer Rose (ID V00124060)
+   Author: Spencer Rose
 */
 #define _POSIX_C_SOURCE 199309L /* for clock_gettime */
 #include <assert.h>

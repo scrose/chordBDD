@@ -4,7 +4,7 @@ Example 3: Building H2O (Exercise 5.6)
 Implementation A
 =========================================
 Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
-Spencer Rose (ID V00124060)
+Author: Spencer Rose
 =========================================
 SUMMARY: There are two kinds of threads, oxygen and hydrogen. In order to
 assemble these threads into water molecules, we have to create a barrier
