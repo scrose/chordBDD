@@ -2,6 +2,13 @@
 =========================================
 Example 4: Baboon Crossing Problem (Exercise 6.3
 =========================================
+SUMMARY: There is a deep canyon and a single rope that spans the canyon. Baboons
+can cross the canyon by swinging on the rope, but if two baboons going in
+opposite directions meet in the middle, they will fight and drop to their deaths.
+Once a baboon has begun to cross, it is guaranteed to get to the other side
+without running into a baboon going the other way. There are never more than 5
+baboons on the rope.
+
 Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
 Spencer Rose (ID V00124060)
 
@@ -10,8 +17,10 @@ Spencer Rose (ID V00124060)
 package main
 
 import (
+	"fmt"
+	"os"
+	"strconv"
 	"sync"
-	"time"
 )
 
 type BaboonCh struct {
@@ -43,12 +52,13 @@ func baboon(i int, wg *sync.WaitGroup, rope BaboonCh) {
 }
 
 func main() {
-	var n = 10
+
+	n, _ := strconv.Atoi(os.Args[1])
+	fmt.Printf("Generating %d east and %d west baboon threads... \n", n, n)
 
 	// Create tracker
 	trk := *NewTracker()
 	tracker(trk)
-	time.Sleep(1)
 
 	// Waiting group for baboon and rope threads
 	var wg sync.WaitGroup
@@ -167,8 +177,5 @@ func main() {
 		go baboon(i, &wg, eastCh)
 		go baboon(i, &wg, westCh)
 	}
-
 	wg.Wait()
-
 }
-

@@ -1,10 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
-
 type Tracker struct {
 	e int
 	w int
@@ -44,11 +39,11 @@ func tracker(t Tracker) {
 			case n := <-t.rwCh:
 				t.rw += n
 			}
-			fmt.Printf("%s|%s%s|%s\n",
+			/* fmt.Printf("%s|%s%s|%s\n",
 				strings.Repeat("E", t.e),
 				strings.Repeat("E", t.re),
 				strings.Repeat("W", t.rw),
-				strings.Repeat("W", t.w))
+				strings.Repeat("W", t.w)) */
 		}
 	}()
 }
