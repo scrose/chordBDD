@@ -1,0 +1,21 @@
+File: search_insert_delete
+Type: delay
+Time: Oct 9, 2018 at 4:18pm (PDT)
+Showing nodes accounting for 67899.40ms, 99.67% of 68123.29ms total
+Dropped 27 nodes (cum <= 340.62ms)
+      flat  flat%   sum%        cum   cum%
+63002.34ms 92.48% 92.48% 63002.34ms 92.48%  sync.(*Mutex).Lock
+ 4890.01ms  7.18% 99.66%  4890.01ms  7.18%  sync.(*RWMutex).RLock
+    7.05ms  0.01% 99.67% 28947.79ms 42.49%  sync.(*RWMutex).Lock
+         0     0% 99.67% 28973.74ms 42.53%  main.deleter
+         0     0% 99.67% 20223.19ms 29.69%  main.inserter
+         0     0% 99.67% 18857.24ms 27.68%  main.searcher
+         0     0% 99.67% 17100.92ms 25.10%  math/rand.(*Rand).Int31
+         0     0% 99.67% 17100.92ms 25.10%  math/rand.(*Rand).Int31n
+         0     0% 99.67% 17100.92ms 25.10%  math/rand.(*Rand).Int63
+         0     0% 99.67% 17100.92ms 25.10%  math/rand.(*Rand).Intn
+         0     0% 99.67% 15493.78ms 22.74%  math/rand.(*Rand).Seed
+         0     0% 99.67% 17100.92ms 25.10%  math/rand.(*lockedSource).Int63
+         0     0% 99.67% 15493.78ms 22.74%  math/rand.(*lockedSource).seedPos
+         0     0% 99.67% 17100.92ms 25.10%  math/rand.Intn
+         0     0% 99.67% 15493.78ms 22.74%  math/rand.Seed

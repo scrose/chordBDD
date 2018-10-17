@@ -1,0 +1,48 @@
+
+
+Creating 60 searchers, 60 inserters, 60 deleters...
+
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       3      900      232       64        1.873        0.002        0.243 M-.--.
+       0      120      119       16        0.659        0.005        0.033 M-.--.
+       1      120       60       13        6.998        0.058        4.484 M-.--.
+       2      120      119        0        0.289        0.002        0.086 M-.--.
+
+
+
+Creating 120 searchers, 120 inserters, 120 deleters...
+
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       0     1800      439      130        3.621        0.002        0.380 M-.--.
+       1      240      239       14        1.304        0.005        0.129 M-.--.
+       2      240      123        9        5.584        0.023        3.270 M-.--.
+       3      240      239        2        0.575        0.002        0.197 M-.--.
+
+
+Creating 600 searchers, 600 inserters, 600 deleters...
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       0     9000     2330     1413       29.438        0.003        7.278 M-.--.
+       2     1200      614      214       14.462        0.012        4.808 M-.--.
+       1     1200     1199      157        8.841        0.007        0.315 M-.--.
+       3     1200     1199        7        2.125        0.002        0.270 M-.--.
+
+
+
+Creating 900 searchers, 900 inserters, 900 deleters...
+
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       0    13500     3374     1788       35.412        0.003        9.850 M-.--.
+       1     1800     1799      435       22.045        0.012        9.723 M-.--.
+       2     1800      907      414       46.363        0.026       14.477 M-.--.
+       3     1800     1799        1        2.301        0.001        0.083 M-.--.
+
+
+
+Creating 3000 searchers, 3000 inserters, 3000 deleters...
+
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       0    45000    11728     5552       74.038        0.002        2.356 M-.--.
+       1     6000     5999     1743       99.646        0.017        8.247 M-.--.
+       2     6000     3050     1713      163.123        0.027       14.340 M-.--.
+       3     6000     5999       10        8.511        0.001        0.284 M-.--.
+

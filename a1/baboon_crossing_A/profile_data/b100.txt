@@ -1,0 +1,27 @@
+File: baboon_crossing
+Type: delay
+Time: Oct 9, 2018 at 4:35pm (PDT)
+Showing nodes accounting for 267.15ms, 100% of 267.15ms total
+Dropped 9 nodes (cum <= 1.34ms)
+      flat  flat%   sum%        cum   cum%
+  153.66ms 57.52% 57.52%   153.66ms 57.52%  runtime.chansend1
+  105.99ms 39.68% 97.19%   105.99ms 39.68%  runtime.chanrecv1
+    5.47ms  2.05% 99.24%     5.47ms  2.05%  runtime.selectgo
+    2.02ms  0.76%   100%     2.02ms  0.76%  sync.(*WaitGroup).Wait
+         0     0%   100%     2.28ms  0.85%  internal/singleflight.(*Group).doCall
+         0     0%   100%   258.31ms 96.69%  main.baboon
+         0     0%   100%     2.02ms  0.76%  main.main
+         0     0%   100%     2.35ms  0.88%  main.main.func1
+         0     0%   100%     2.35ms  0.88%  net.(*ListenConfig).Listen
+         0     0%   100%     2.35ms  0.88%  net.(*Resolver).LookupIPAddr
+         0     0%   100%     2.28ms  0.85%  net.(*Resolver).LookupIPAddr.func1
+         0     0%   100%     2.35ms  0.88%  net.(*Resolver).internetAddrList
+         0     0%   100%     2.28ms  0.85%  net.(*Resolver).lookupIP
+         0     0%   100%     2.28ms  0.85%  net.(*Resolver).lookupIP-fm
+         0     0%   100%     2.35ms  0.88%  net.(*Resolver).resolveAddrList
+         0     0%   100%     2.35ms  0.88%  net.Listen
+         0     0%   100%     2.28ms  0.85%  net.cgoLookupIP
+         0     0%   100%     2.28ms  0.85%  net.glob..func1
+         0     0%   100%     2.35ms  0.88%  net/http.(*Server).ListenAndServe
+         0     0%   100%     2.35ms  0.88%  net/http.ListenAndServe
+         0     0%   100%     2.02ms  0.76%  runtime.main

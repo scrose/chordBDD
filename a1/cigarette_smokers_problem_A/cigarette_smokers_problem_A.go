@@ -3,7 +3,7 @@
 Example 1: Cigarette Smokers Problem (Exercise 4.5)
 =========================================
 Completed for CSC 564 (Concurrency), Prof. Yvonne Coady, Fall 2018
-Author: Spencer Rose
+Spencer Rose (ID V00124060)
 =========================================
 SUMMARY: Four threads are involved: an agent and three smokers. The smokers loop
 forever, first waiting for ingredients, then making and smoking cigarettes. The
@@ -23,8 +23,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"os"
-	"strconv"
 	"sync"
 	"time"
 )
@@ -57,6 +55,7 @@ type helperTypes struct {
 func agent(scoreboard *Scoreboard, helpers helperTypes, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for scoreboard.smokes < scoreboard.n {
+		fmt.Printf("Tobacco: %d | Paper: %d | Matches: %d | Smokes: %d\n", scoreboard.tobacco, scoreboard.paper, scoreboard.matches, scoreboard.smokes)
 		// Generate random selection of ingredients
 		rand.Seed(time.Now().UTC().UnixNano())
 		var x = rand.Intn(3) + 1
@@ -68,6 +67,7 @@ func agent(scoreboard *Scoreboard, helpers helperTypes, wg *sync.WaitGroup) {
 		case 3:
 			helpers.matches <- true
 		}
+
 	}
 }
 
@@ -81,10 +81,12 @@ func helperA(scoreboard *Scoreboard, smokers smokerTypes, helperCh chan bool) {
 			if scoreboard.paper > 0 {
 				smokers.matches <- true
 				<-smokers.matches
+				scoreboard.paper--
 				scoreboard.smokes++
 			} else if scoreboard.matches > 0 {
 				smokers.paper <- true
 				<-smokers.paper
+				scoreboard.matches--
 				scoreboard.smokes++
 			} else {
 				scoreboard.tobacco++
@@ -106,10 +108,12 @@ func helperB(scoreboard *Scoreboard, smokers smokerTypes, helperCh chan bool) {
 			if scoreboard.tobacco > 0 {
 				smokers.matches <- true
 				<-smokers.matches
+				scoreboard.tobacco--
 				scoreboard.smokes++
 			} else if scoreboard.matches > 0 {
 				smokers.tobacco <- true
 				<-smokers.tobacco
+				scoreboard.matches--
 				scoreboard.smokes++
 			} else {
 				scoreboard.paper++
@@ -131,10 +135,12 @@ func helperC(scoreboard *Scoreboard, smokers smokerTypes, helperCh chan bool) {
 			if scoreboard.tobacco > 0 {
 				smokers.paper <- true
 				<-smokers.paper
+				scoreboard.tobacco--
 				scoreboard.smokes++
 			} else if scoreboard.paper > 0 {
 				smokers.tobacco <- true
 				<-smokers.tobacco
+				scoreboard.paper--
 				scoreboard.smokes++
 			} else {
 				scoreboard.matches++
@@ -147,24 +153,25 @@ func helperC(scoreboard *Scoreboard, smokers smokerTypes, helperCh chan bool) {
 }
 
 func smoke(smoker string) {
-	/* fmt.Printf("%s smoker finshed smoking.\n", smoker) */
+	fmt.Printf("%s smoker finshed smoking.\n", smoker)
 	return
 }
 
 func main() {
-	n, _ := strconv.Atoi(os.Args[1])
+	n := 500
+	//n, _ := strconv.Atoi(os.Args[1])
 	fmt.Printf("Generating %d cigarettes... \n", n)
 
 	smokers := smokerTypes{
-		tobacco: make(chan bool, 1),
-		matches: make(chan bool, 1),
-		paper: make(chan bool, 1),
+		tobacco: make(chan bool, 10),
+		matches: make(chan bool, 10),
+		paper: make(chan bool, 10),
 	}
 
 	helpers := helperTypes{
-		tobacco: make(chan bool, 1),
-		matches: make(chan bool, 1),
-		paper: make(chan bool, 1),
+		tobacco: make(chan bool, 10),
+		matches: make(chan bool, 10),
+		paper: make(chan bool, 10),
 	}
 
 	scoreboard := Scoreboard{

@@ -1,0 +1,8 @@
+File: fifo_barbershop_A
+Type: delay
+Time: Oct 9, 2018 at 4:06pm (PDT)
+Showing nodes accounting for 12.45s, 99.47% of 12.52s total
+Dropped 28 nodes (cum <= 0.06s)
+      flat  flat%   sum%        cum   cum%
+    12.45s 99.47% 99.47%     12.45s 99.47%  runtime.chansend1
+         0     0% 99.47%     12.50s 99.84%  main.main.func3

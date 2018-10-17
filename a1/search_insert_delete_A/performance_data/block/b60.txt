@@ -1,0 +1,41 @@
+File: search_insert_delete
+Type: delay
+Time: Oct 9, 2018 at 4:18pm (PDT)
+Showing nodes accounting for 245.12ms, 100% of 245.12ms total
+Dropped 7 nodes (cum <= 1.23ms)
+      flat  flat%   sum%        cum   cum%
+  184.68ms 75.34% 75.34%   184.68ms 75.34%  sync.(*Mutex).Lock
+   50.03ms 20.41% 95.75%    50.03ms 20.41%  sync.(*RWMutex).RLock
+    6.49ms  2.65% 98.40%     6.49ms  2.65%  runtime.selectgo
+    1.86ms  0.76% 99.16%     1.86ms  0.76%  sync.(*WaitGroup).Wait
+    1.45ms  0.59% 99.75%     1.45ms  0.59%  runtime.chansend1
+    0.61ms  0.25%   100%   104.71ms 42.72%  sync.(*RWMutex).Lock
+         0     0%   100%     2.35ms  0.96%  internal/singleflight.(*Group).doCall
+         0     0%   100%   106.09ms 43.28%  main.deleter
+         0     0%   100%    71.04ms 28.98%  main.inserter
+         0     0%   100%     1.86ms  0.76%  main.main
+         0     0%   100%     2.42ms  0.99%  main.main.func1
+         0     0%   100%     1.72ms   0.7%  main.main.func2
+         0     0%   100%    59.53ms 24.29%  main.searcher
+         0     0%   100%     3.53ms  1.44%  math/rand.(*Rand).Int31
+         0     0%   100%     3.53ms  1.44%  math/rand.(*Rand).Int31n
+         0     0%   100%     3.53ms  1.44%  math/rand.(*Rand).Int63
+         0     0%   100%     3.53ms  1.44%  math/rand.(*Rand).Intn
+         0     0%   100%    69.62ms 28.40%  math/rand.(*Rand).Seed
+         0     0%   100%     3.53ms  1.44%  math/rand.(*lockedSource).Int63
+         0     0%   100%    69.62ms 28.40%  math/rand.(*lockedSource).seedPos
+         0     0%   100%     3.53ms  1.44%  math/rand.Intn
+         0     0%   100%    69.62ms 28.40%  math/rand.Seed
+         0     0%   100%     2.42ms  0.99%  net.(*ListenConfig).Listen
+         0     0%   100%     2.42ms  0.99%  net.(*Resolver).LookupIPAddr
+         0     0%   100%     2.35ms  0.96%  net.(*Resolver).LookupIPAddr.func1
+         0     0%   100%     2.42ms  0.99%  net.(*Resolver).internetAddrList
+         0     0%   100%     2.35ms  0.96%  net.(*Resolver).lookupIP
+         0     0%   100%     2.35ms  0.96%  net.(*Resolver).lookupIP-fm
+         0     0%   100%     2.42ms  0.99%  net.(*Resolver).resolveAddrList
+         0     0%   100%     2.42ms  0.99%  net.Listen
+         0     0%   100%     2.35ms  0.96%  net.cgoLookupIP
+         0     0%   100%     2.35ms  0.96%  net.glob..func1
+         0     0%   100%     2.42ms  0.99%  net/http.(*Server).ListenAndServe
+         0     0%   100%     2.42ms  0.99%  net/http.ListenAndServe
+         0     0%   100%     1.86ms  0.76%  runtime.main

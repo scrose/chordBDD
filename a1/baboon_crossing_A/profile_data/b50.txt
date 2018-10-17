@@ -1,0 +1,15 @@
+File: baboon_crossing
+Type: delay
+Time: Oct 9, 2018 at 4:35pm (PDT)
+Showing nodes accounting for 73.70ms, 100% of 73.70ms total
+Dropped 7 nodes (cum <= 0.37ms)
+      flat  flat%   sum%        cum   cum%
+   46.05ms 62.47% 62.47%    46.05ms 62.47%  runtime.chansend1
+   25.96ms 35.22% 97.69%    25.96ms 35.22%  runtime.chanrecv1
+    1.19ms  1.62% 99.31%     1.19ms  1.62%  sync.(*WaitGroup).Wait
+    0.51ms  0.69%   100%     0.51ms  0.69%  runtime.selectgo
+         0     0%   100%    71.33ms 96.78%  main.baboon
+         0     0%   100%     1.19ms  1.62%  main.main
+         0     0%   100%     0.56ms  0.76%  main.main.func2
+         0     0%   100%     0.51ms  0.69%  main.tracker.func1
+         0     0%   100%     1.19ms  1.62%  runtime.main

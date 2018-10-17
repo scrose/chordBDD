@@ -1,0 +1,80 @@
+Making 100 cigarettes...
+
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       2      997      193       39        1.028        0.001        0.083 M-.--.
+       1      733       72       22        0.812        0.001        0.110 M-.--.
+       0      895       49       17        2.753        0.003        0.111 M-.--.
+       3       30        5        1        0.032        0.001        0.006 M-.--.
+
+
+Thread 0: 0.0018775780
+Thread 1: 0.0059554070
+Thread 2: 0.0038208750
+Thread 3: 0.0032596170
+Thread 4: 0.0004193210
+Thread 5: 0.0042094580
+Total Wait Time: 0.0195422560
+Total runtime is 9.545 ms.
+ 
+
+
+Making 1000 cigarettes...
+
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       0     3658     1533      839       16.825        0.005        0.227 M-.--.
+       2     4660     2444      328        4.804        0.001        0.043 M-.--.
+       1     2640     1018       79        2.711        0.001        0.030 M-.--.
+       3       35        8        5        0.043        0.001        0.010 M-.--.
+
+
+Thread 0: 0.0046644920
+Thread 1: 0.0398202800
+Thread 2: 0.0344778140
+Thread 3: 0.0281036150
+Thread 4: 0.0112480390
+Thread 5: 0.0300845210
+Total Wait Time: 0.1483987610
+
+Total runtime is 45.162 ms.
+
+
+
+Making 10000 cigarettes...
+
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       0    39961    20958    11779      247.241        0.006        0.475 M-.--.
+       2    49963    35985     4254       55.304        0.001        0.422 M-.--.
+       1    29981    12585      576       33.098        0.001        0.188 M-.--.
+       3       35        7        4        0.033        0.001        0.002 M-.--.
+
+
+Thread 0: 0.0223756760
+Thread 1: 0.5303193370
+Thread 2: 0.5196842980
+Thread 3: 0.5207344640
+Thread 4: 0.3225731140
+Thread 5: 0.2635961160
+Total Wait Time: 2.1792830050
+
+Total runtime is 572.104 ms.
+
+
+
+Making 100000 cigarettes...
+
+ Mutex #   Locked  Changed    Cont. tot.Time[ms] avg.Time[ms] max.Time[ms]  Flags
+       1   399983   228145   126993     2541.342        0.006        0.758 M-.--.
+       3   499985   373828    43250      553.522        0.001        0.825 M-.--.
+       2   299991   128971     6807      332.196        0.001        0.625 M-.--.
+       0       35       11        5        0.039        0.001        0.006 M-.--.
+
+
+Thread 0: 0.2130210620
+Thread 1: 5.2503754560
+Thread 2: 5.2683519930
+Thread 3: 5.2598044670
+Thread 4: 3.0686188540
+Thread 5: 3.0148676480
+Total Wait Time: 22.0750394800
+Total runtime is 5750.796 ms.
+

@@ -1,0 +1,25 @@
+
+
+Creating 10 oxygen atoms and 20 hydrogen atoms...
+
+Total Wait Time: 0.0017475970
+
+
+Creating 50 oxygen atoms and 100 hydrogen atoms...
+
+Total Wait Time: 0.0091048780
+
+
+Creating 100 oxygen atoms and 200 hydrogen atoms...
+
+Total Wait Time: 0.0159064750
+
+
+Creating 500 oxygen atoms and 1000 hydrogen atoms...
+
+Total Wait Time: 0.0782296250
+
+
+Creating 1000 oxygen atoms and 2000 hydrogen atoms...
+
+Total Wait Time: 0.1568919920
