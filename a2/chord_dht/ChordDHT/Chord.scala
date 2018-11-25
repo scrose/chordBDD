@@ -35,14 +35,14 @@ class Chord(n: Int) {
   // TODO: Check if base node has failed prior to lookup
   // -----------------------------------------------------
   // Lookup value at <key>
-  def lookup(key: Int): Option[List[Int]] = {
+  def lookup(key: String): Option[List[Int]] = {
     inbox.send(n0, LookUp(key, inbox.getRef()))
     Option(inbox.receive(10.seconds).asInstanceOf[List[Int]])
   }
 
   // Store value in DHT; returns associated key
-  def insert(data: List[Int]): Int = {
-    inbox.send(n0, Insert(data, inbox.getRef()))
+  def insert(key: String, data: List[Int]): Int = {
+    inbox.send(n0, Insert(key, data, inbox.getRef()))
     inbox.receive(10.seconds).asInstanceOf[Int]
   }
 }

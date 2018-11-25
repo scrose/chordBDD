@@ -12,8 +12,8 @@ object Main extends App {
 
   // Insert value into Chord Table
   val value = List(0, 3, 6, 18, 27)
-  val key = dhtable.insert(value)
-  println(f"Key/Value created: ($key, $value)")
+  val key = "ExampleList"
+  dhtable.insert(key, value)
 
   // Lookup value at key
   println(f"Value Retrieved: ${dhtable.lookup(key).getOrElse("Not Found")}")

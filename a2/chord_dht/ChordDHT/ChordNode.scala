@@ -88,8 +88,8 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
 
     // API: Insert data and return key
     // TODO: create wrapper for local method Insert()
-    case Insert(dataInsert, respondTo) =>
-      val key: Int = hashID(dataInsert.toString)
+    case Insert(keyInsert, dataInsert, respondTo) =>
+      val key: Int = hashID(keyInsert.toString)
       val n = findSuccessor(key).get
       val f: Future[Int] = ask(n.ref, InsertAt(dataInsert, key)).mapTo[Int]
       f.onComplete {
@@ -101,7 +101,8 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
 
     // API: Lookup key and return data
     // TODO: create wrapper for local method LookUp()
-    case LookUp(key, respondTo) =>
+    case LookUp(reqkey, respondTo) =>
+      val key = hashID(reqkey)
       printFinger(f"Node $id [Port: $ip]: Lookup Key[$key].\n")
       val n = findSuccessor(key).get
       val f: Future[List[Int]] = ask(n.ref, Retrieve(key)).mapTo[List[Int]]
@@ -301,8 +302,8 @@ object ChordNode {
   final case class Retrieve(key: Int) extends Command
   final case class FindPredecessor() extends Command
   final case class Notify(node: NodeData) extends Command
-  final case class LookUp(key: Int, respondTo: ActorRef) extends Command
-  final case class Insert(data: List[Int], respondTo: ActorRef) extends Command
+  final case class LookUp(key: String, respondTo: ActorRef) extends Command
+  final case class Insert(key: String, data: List[Int], respondTo: ActorRef) extends Command
   final case class InsertAt(data: List[Int], key: Int) extends Command
 
   def props(ipAddress: String, m: Int, nodeConnect: Option[ActorRef] = None):
