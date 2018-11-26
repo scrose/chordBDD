@@ -202,8 +202,8 @@ Keys: Empty
 
 
 
-Node 28 [Port: 2556]: Find successor to Key 108.
-Node 28 [Port: 2556]: Inserting data for Key[108].
+Node 116 [Port: 2556]: Find successor to Key 108.
+Node 114 [Port: 2556]: Inserting data for Key[108].
 Node 116 [Port: 2553] Update: Predecessor: 114, Successor: 28.
 
 Node 114 [Port: 2556]: Inserted data [List(0, 3, 6, 18, 27)] at Key[108].
