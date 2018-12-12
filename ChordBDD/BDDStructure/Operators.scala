@@ -1,4 +1,4 @@
-package BDD_Structure
+package BDDStructure
 
 sealed trait Operators
   case object AND extends Operators

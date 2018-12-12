@@ -6,15 +6,15 @@
 //  * vars <array[<string>]> = List of ordered variable string identifiers
 // -----------------------------------------------------------------
 
-package BDD_Single
+package BDDSingle
 
-import BDD_Structure._
+import BDDStructure._
 import net.sourceforge.jeval.Evaluator
 
 import scala.collection.mutable
 
 // -----------------------------------------------------------------
-class ROBDD(val expr: String = "", vars: Array[String]) extends Serializable {
+class BDD(val expr: String = "", vars: Array[String]) extends Serializable {
   val n: Int = vars.length
   var nodeCount: Int = 0
   var exp: String = expr.replaceAll("""[\n\r\s]+""", "")
@@ -93,8 +93,8 @@ class ROBDD(val expr: String = "", vars: Array[String]) extends Serializable {
   //  * bdd1, bdd2 <ROBDD> = ROBDD objects to apply ITE operator
   //  * op <enum> = Operator value
 
-  def ite(bdd1: ROBDD, bdd2: ROBDD, op: Operators) {
-    printf("\n\nApply ROBDD operator %s to BE: \nExp[1] = %s\nExp[2] = %s (Sequential)\n\n", op, bdd1.exp, bdd2.exp)
+  def ite(bdd1: BDD, bdd2: BDD, op: Operators) {
+    printf("\n\nApply ITE operator %s to expressions: \nExp[1] = %s\nExp[2] = %s (Sequential)\n", op, bdd1.exp, bdd2.exp)
     val u1 = bdd1.root
     val u2 = bdd2.root
 

@@ -8,14 +8,18 @@
 //  * nodeConnect <ActorRef> = Proxy node for node join operation
 // -----------------------------------------------------------------
 
-package Chord_DHT
+package ChordDHT
 
 import java.security.MessageDigest
-import Chord_DHT.ChordNode._
-import akka.actor.{Actor, ActorRef, Props}
+
+import ChordDHT.ChordNode._
+import akka.actor.{Actor, ActorRef, Cancellable, Props}
 import akka.util.Timeout
-import scala.concurrent.ExecutionContextExecutor
+import akka.pattern.ask
+
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.concurrent.duration._
+import scala.util.{Failure, Success}
 
 class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorRef] = None) extends Actor {
 
@@ -24,40 +28,50 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
   val id: Int = hashID(ip)
   val ref: ActorRef = self
   var keys: Option[List[Int]] = Option(List[Int]())
+  var keysPred: Option[List[Int]] = Option(List[Int]())
   var data: Map[Int, Any] = Map()
-  var keysReplica: Option[List[Int]] = None
-  var dataReplica: Map[Int, Any] = Map()
   var finger: Array[fingerEntry] = new Array[fingerEntry](m)
   var predecessor: Option[NodeData] = None
   var successor: Option[NodeData] = Option(this.toNodeData)
   var next: Int = 0
+  var msgCount: Int = 0
 
   implicit val ec: ExecutionContextExecutor = context.system.dispatcher
-  implicit val timeout: Timeout = 20.seconds
-
-  // Finger Table entry
-  class fingerEntry (k: Int, n: NodeData) {
-    var start: Int = ((id + math.pow(2, k))%math.pow(2,m)).toInt
-    var interval: (Int, Int) = (start, ((id + math.pow(2, k + 1))%math.pow(2,m)).toInt)
-    var node: Option[NodeData] = Option(n)
-  }
-
-  // Initialize Finger Table
-  initFingers()
-
-  // Join Chord
-  join()
+  implicit val timeout: Timeout = 5.seconds
 
   // ----------------------------------------------------
   // Schedule stabilization and finger fix jobs to run periodically
-  context.system.scheduler.schedule(50.milliseconds, 50.milliseconds)(
+  val cancellable1: Cancellable = context.system.scheduler.schedule(40.milliseconds, 10.milliseconds)(
     if (successor.isDefined && successor.get.id != id) stabilize()
   )(context.system.dispatcher)
-  context.system.scheduler.schedule(50.milliseconds, 5.milliseconds)(updateFingers(next))(context.system.dispatcher)
-  context.system.scheduler.schedule(3.seconds, 5.seconds)(printTable())(context.system.dispatcher)
+  val cancellable2: Cancellable = context.system.scheduler.schedule(40.milliseconds, 5.milliseconds)(
+    updateFingers(next))(context.system.dispatcher)
+  val cancellable3: Cancellable = context.system.scheduler.schedule(3.seconds, 3.seconds)(
+    printTable("Status Update"))(context.system.dispatcher)
+  val cancellable4: Cancellable = context.system.scheduler.schedule(5.seconds, 1.seconds)(
+    checkPredecessor()
+  )(context.system.dispatcher)
 
-  override def preStart(): Unit = println("Chord Node started")
-  override def postStop(): Unit = println("Chord Node stopped")
+  // Finger Table entry
+  class fingerEntry(k: Int, n: NodeData) {
+    var start: Int = ((id + math.pow(2, k)) % math.pow(2, m)).toInt
+    var interval: (Int, Int) = (start, ((id + math.pow(2, k + 1)) % math.pow(2, m)).toInt)
+    var node: Option[NodeData] = Option(n)
+  }
+
+  override def preStart(): Unit = {
+    println(f"Chord Node[$id] started")
+    initFingers()
+    join()
+  }
+
+  override def postStop(): Unit = {
+    cancellable1.cancel()
+    cancellable2.cancel()
+    cancellable3.cancel()
+    cancellable4.cancel()
+    println(f"Chord Node[$id] stopped")
+  }
 
   // Node communication
   // -----------------------------------------------------
@@ -69,7 +83,6 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
     // Join node to ring
     case Join(node) =>
       if (node.isDefined) {
-        // printTable(f"Node[$id]: Join Request: ${node.get.id}.\n")
         findSuccessor(node.get.id, node.get.ref, join = true)
       }
 
@@ -82,7 +95,7 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
 
     // Get successor node to key (in NodeData)
     case FindSuccessor(key, respondTo, retrieve, insert, join) =>
-        findSuccessor(key: Int, respondTo, retrieve, insert, join)
+      findSuccessor(key: Int, respondTo, retrieve, insert, join)
 
     // Response to successor request
     case FoundSuccessor(key, node) =>
@@ -94,20 +107,13 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
       }
 
     // Request predecessor of node -> Response: send predecessor
-    case Stabilize() => sender ! StabilizeResponse(predecessor)
-
-    // Response to stabilize request
-    case StabilizeResponse(node) =>
-      if (node.isDefined && inInterval(node.get.id, id, successor.get.id)) {
-        if (node.get.id != id) successor = node
-        //printTable(f"Node $id [Port: $ip]: Stabilize ~ Successor: ${successor.get.id}, Succ.Pred: ${result.get.id}\n")
-      }
-      // Notify successor node that local node is possible predecessor
-      successor.get.ref ! Notify(this.toNodeData)
+    case Stabilize() => sender ! predecessor
 
     // Notification of possible predecessor
-    case Notify(node) =>
-        notify(Option(node))
+    case Notify(node) => notify(Option(node))
+
+    // Check predecessor exists
+    case CheckPredecessor() => sender ! true
 
     // API: Insert data and return key
     case Insert(keyValue) =>
@@ -117,13 +123,14 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
     // Insert data at key
     case InsertAt(keyValue, dataInsert) =>
       val key: Int = hashID(keyValue.toString)
-      println(f"Node $id [Port: $ip]: Inserting data for Key[$key].")
+      // println(f"Node $id [Port: $ip]: Inserting data for Key[$key].")
       sender ! insert(key, dataInsert)
 
     // Insert data at key
-    case InsertReplica(key, dataInsert) =>
-      // println(f"Node $id [Port: $ip]: Replicating data for Key[$key].")
-      insert(key, dataInsert, replica = true)
+    case InsertReplica(keysInsert, dataReplica) =>
+      //println(f"Node $id [Port: $ip]: Replicating data.")
+      keysInsert.foreach(k => insert(k, dataReplica(k), replica = true))
+
 
     // API: Lookup key and return data
     case LookUp(keyValue) =>
@@ -151,28 +158,28 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
   // -----------------------------------------------------
 
   // Store value in DHT; returns associated key
+  // Include replicated data in same data map / different key map
   private def insert(key: Int, value: Any, replica: Boolean = false): Int = {
     if (value != null && !replica) {
-      keys = Option(keys.getOrElse(List[Int]()) :+ key)
-      data += (key -> value)
-      //printf("Node %d [Port: %s]: Inserted data [%s] at Key[%d].\n", id, ip, data(key), key)
+      if (!keys.get.contains(key)) keys = Option(keys.getOrElse(List[Int]()) :+ key)
       // Replicate data on successor node
-      successor.get.ref ! InsertReplica(key, value)
+      successor.get.ref ! InsertReplica(List(key), Map(key -> value))
     } else if (value != null && replica)  {
-      keysReplica = Option(keysReplica.getOrElse(List[Int]()) :+ key)
-      dataReplica += (key -> value)
-      //printf("Node %d [Port: %s]: Inserted Replicated data [%s] at Key[%d].\n", id, ip, dataReplica(key), key)
+      if (!keysPred.get.contains(key)) keysPred = Option(keysPred.getOrElse(List[Int]()) :+ key)
     }
     else {return -1}
+    // TODO: Create key-based check of data mapping
+    if (!data.exists(_ == (key,value))) data += (key -> value)
     key
   }
 
   // Node Failure Handler:
   // Copies replica keys to main data
-  private def moveKeys (n: NodeData){
-    if (keysReplica.isDefined){
-      keysReplica.get.foreach(k => insert(k, dataReplica(k)))
+  private def moveKeys (){
+    if (keysPred.isDefined){
+      keysPred.get.foreach(k => keys = Option(keys.getOrElse(List[Int]()) :+ k))
     }
+    keysPred = Option(List[Int]())
   }
 
   // Chord Operations
@@ -196,7 +203,6 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
       else if (join) respondTo ! JoinResponse(successor)
       else respondTo ! FoundSuccessor(key, successor)
     }
-
     // Successor not found locally:
     else {
       val n = findPrecedingNode(key)
@@ -219,7 +225,23 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
 
   // Periodically verify local node's successor and notify/update in turn
   private def stabilize() {
-    successor.get.ref ! Stabilize()
+    val f: Future[Option[NodeData]] = ask(successor.get.ref, Stabilize()).mapTo[Option[NodeData]]
+    f.onComplete {
+      case Success(node) =>
+        if (node.isDefined && inInterval(node.get.id, id, successor.get.id)) {
+          if (node.get.id != id) successor = node
+        }
+      case Failure(e) =>
+        //println(f"Node[$id]: <Not Found> Successor[${successor.get.id}].")
+        val nextSuccessor = (m - 1 to 0 by -1)
+          .find(i => inInterval(finger(i).node.get.id, successor.get.id, id))
+          .map(finger(_).node)
+          .getOrElse(predecessor)
+        successor = nextSuccessor
+        successor.get.ref ! InsertReplica(keys.get, data)
+    }
+    // Notify successor node that local node is possible predecessor
+    successor.get.ref ! Notify(this.toNodeData)
   }
 
   // Notify local node that the remote node might be its predecessor
@@ -229,7 +251,6 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
       predecessor = node
       // Update default base node successor
       if (successor.get.id == id) successor = node
-      // printf(f"Node $id [Port: $ip] Update: Predecessor: ${predecessor.get.id}, Successor: ${successor.get.id}.\n")
     }
   }
 
@@ -240,11 +261,11 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
   }
   // Fix fingers of node based on successor
   private def fixFingers (key: Int, node: Option[NodeData]): Unit = {
-      (0 until m)
-        .filter(i =>
-          inInterval(node.get.id, finger(i).start, finger(i).node.get.id, "right") &&
-          !inInterval(node.get.id, finger(i).start, finger(i).interval._2, "right"))
-        .foreach(finger(_).node = node)
+    (0 until m)
+      .filter(i =>
+        inInterval(node.get.id, finger(i).start, finger(i).node.get.id, "right") &&
+        !inInterval(node.get.id, finger(i).start, finger(i).interval._2, "right"))
+      .foreach(finger(_).node = node)
   }
 
   // Updates local finger table entries (called periodically).
@@ -252,6 +273,21 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
     findSuccessor(finger(next).start, ref)
     next += 1
     if (next == m) next = 0
+  }
+
+  // Check status of predecessor node
+  private def checkPredecessor(): Unit = {
+    if (predecessor.isDefined) {
+      val f: Future[Boolean] = ask(predecessor.get.ref, CheckPredecessor()).mapTo[Boolean]
+      f.onComplete {
+        case Success(result) =>
+          //println(f"Node[$id]: <Found> Predecessor[${predecessor.get.id}].")
+        case Failure(e) =>
+          println(f"Node[$id]: <Not Found> Predecessor[${predecessor.get.id}].")
+          predecessor = None
+          moveKeys()
+      }
+    }
   }
 
 
@@ -293,6 +329,8 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
   def printTable(msg: String = ""): Unit = {
     val pred = predecessor.map(_.id).getOrElse("Unknown")
     val succ = successor.map(_.id).getOrElse("Unknown")
+    val keyD = keys.map(_.toString()).get
+    val keyR = keysPred.map(_.toString()).get
     val hr = "--------------------------------------------------\n"
     var output: String = "\n\n" + msg + f"\nNode[$id%d]: Finger Table\n" + hr
     output += "%1$-5s %2$-10s %3$-15s %4$-10s\n".format("i", "start", "interval", "successor") + hr
@@ -304,8 +342,8 @@ class ChordNode (ipAddress: String = "", mBits: Int, nodeConnect : Option[ActorR
     }
     output += hr + f"Predecessor: $pred%s\n"
     output += f"Successor:$succ%s\n"
-    output += f"Keys: ${keys.map(_.toString()).getOrElse("Empty")}%s\n"
-    output += f"Replicated Keys: ${keysReplica.map(_.toString()).getOrElse("Empty")}%s\n" + hr
+    output += f"Keys: $keyD%s\n"
+    output += f"Replicated Keys: $keyR%s\n" + hr
     println(output)
   }
 }
@@ -322,12 +360,12 @@ object ChordNode {
   final case class Retrieve(key: Int, respondTo: ActorRef) extends Command
   final case class FindPredecessor() extends Command
   final case class Stabilize() extends Command
-  final case class StabilizeResponse(node: Option[NodeData]) extends Command
+  final case class CheckPredecessor() extends Command
   final case class Notify(node: NodeData) extends Command
   final case class LookUp(key: Any) extends Command
   final case class Insert(key: Any) extends Command
   final case class InsertAt(key: Any, data: Any) extends Command
-  final case class InsertReplica(key: Int, data: Any) extends Command
+  final case class InsertReplica(keys: List[Int], data: Map[Int, Any]) extends Command
 
   def props(ipAddress: String, m: Int, nodeConnect: Option[ActorRef] = None):
   Props = Props(new ChordNode(ipAddress, m, nodeConnect))

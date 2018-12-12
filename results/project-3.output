@@ -1,0 +1,56 @@
+Sequential / Distributed
+--------------------
+Chord (n=1)
+
+Elapsed time: 32690243ns
+Elapsed time: 10726128ns
+Elapsed time: 13681930ns
+      
+Elapsed time: 4410705ns
+Elapsed time: 2775506ns
+Elapsed time: 632966ns
+
+--------------------
+Chord (n=5)
+Elapsed time: 30970608ns
+Elapsed time: 11126282ns
+Elapsed time: 16835747ns
+
+Elapsed time: 5207882ns
+Elapsed time: 3370779ns
+Elapsed time: 647694ns
+
+------------
+Chord (n=10)
+
+Elapsed time: 28777205ns
+Elapsed time: 8637858ns
+Elapsed time: 14205743ns
+
+Elapsed time: 4412533ns
+Elapsed time: 2902334ns
+Elapsed time: 569742ns
+
+
+------------
+Chord (n=20)
+
+Elapsed time: 28895976ns
+Elapsed time: 8064451ns
+Elapsed time: 15257150ns
+
+Elapsed time: 4426190ns
+Elapsed time: 2942022ns
+Elapsed time: 595288ns
+
+------------
+Chord (n=50)
+
+Elapsed time: 28141308ns
+Elapsed time: 8582933ns
+Elapsed time: 16795412ns
+       
+
+Elapsed time: 4569969ns
+Elapsed time: 3579156ns
+Elapsed time: 544955ns

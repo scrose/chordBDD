@@ -7,16 +7,16 @@
 //  * DHT <Chord> = Chord distributed hash table singleton
 // -----------------------------------------------------------------
 
-package BDD_Distributed
+package BDDDistributed
 
-import BDD_Structure._
-import Chord_DHT._
+import BDDStructure._
+import ChordDHT._
 import net.sourceforge.jeval.Evaluator
 import org.apache.spark.SparkContext
 
 import scala.collection.mutable
 
-class ROBDD(expr: String, vars: Array[String], DHT: Chord) {
+class BDD(expr: String, vars: Array[String], DHT: Chord) {
   val n: Int = vars.length
   var nodeCount: Int = 0
   var exp: String = expr.replaceAll("""[\n\r\s]+""", "")
@@ -77,7 +77,7 @@ class ROBDD(expr: String, vars: Array[String], DHT: Chord) {
   // -----------------------------------------------------------------
   // Construct ROBDD for boolean expression exp <String>
   def build(): Int = {
-    printf("\n\nDistributed build of ROBDD for Exp = \n%s\n\n", exp)
+    printf("\n\nDistributed build of BDD for expression = \n%s\n\n", exp)
     def bld(exp: String, i: Int): Int = {
       if (i > n) {
         if (eval(exp)) 1 else 0
@@ -95,7 +95,7 @@ class ROBDD(expr: String, vars: Array[String], DHT: Chord) {
   // -----------------------------------------------------------------
   // Parallelized ROBDD constructor for boolean expression exp <String>
   def pbuild(sc: SparkContext): Int = {
-    printf("\n\nParallel build of ROBDD for Exp = \n%s\n\n", exp)
+    printf("\nDistributed build of BDD for expression = \n%s\n", exp)
 
     def bld(exp: String, i: Int): Int = {
       var l = 0
@@ -125,8 +125,8 @@ class ROBDD(expr: String, vars: Array[String], DHT: Chord) {
   //  * bdd1, bdd2 <ROBDD> = ROBDD objects to apply ITE operator
   //  * op <enum> = Operator value
 
-  def ite(bdd1: ROBDD, bdd2: ROBDD, op: Operators){
-    printf("\n\nApply ROBDD operator %s to BE: \nExp[1] = %s\nExp[2] = %s\n\n", op, bdd1.exp, bdd2.exp)
+  def ite(bdd1: BDD, bdd2: BDD, op: Operators){
+    printf("\n\nApply ITE operator %s to expressions: \nExp[1] = %s\nExp[2] = %s\n", op, bdd1.exp, bdd2.exp)
     val u1 = bdd1.root
     val u2 = bdd2.root
     val c = 0
@@ -162,8 +162,8 @@ class ROBDD(expr: String, vars: Array[String], DHT: Chord) {
 
   // -----------------------------------------------------------------
   // ITE (If-Then-Else) Operator: computes a logical operation on two ROBDDs
-  def pite(bdd1: ROBDD, bdd2: ROBDD, op: Operators, sc: SparkContext): Int = {
-    printf("\n\nApply ROBDD operator %s to BE: \nExp[1] = %s\nExp[2] = %s\n\n", op, bdd1.exp, bdd2.exp)
+  def pite(bdd1: BDD, bdd2: BDD, op: Operators, sc: SparkContext): Int = {
+    printf("\n\nApply parallel ITE operator %s to expressions: \nExp[1] = %s\nExp[2] = %s\n\n", op, bdd1.exp, bdd2.exp)
     val u1 = bdd1.root
     val u2 = bdd2.root
 

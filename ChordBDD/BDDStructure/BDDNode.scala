@@ -1,4 +1,4 @@
-package BDD_Structure
+package BDDStructure
 
 // BDD Node definition
 class BDDNode(variable: Int, l: Int, h: Int) extends Serializable  {
