@@ -1,9 +1,0 @@
-File: baboon_crossing
-Type: delay
-Time: Oct 9, 2018 at 4:35pm (PDT)
-Showing nodes accounting for 5s, 99.67% of 5.01s total
-Dropped 27 nodes (cum <= 0.03s)
-      flat  flat%   sum%        cum   cum%
-     2.60s 51.85% 51.85%      2.60s 51.85%  runtime.chanrecv1
-     2.40s 47.83% 99.67%      2.40s 47.83%  runtime.chansend1
-         0     0% 99.67%      4.99s 99.58%  main.baboon

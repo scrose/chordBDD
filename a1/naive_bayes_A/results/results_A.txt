@@ -1,8 +1,0 @@
-Building training model...
-Total number of training documents = 11269
-
-Training running time (s): 5.031157970428467
-Applying model to training data...
-Testing running time (s): 45.624099016189575
-Prediction Accuracy:             95.79377052089804 %
-Total running time (s): 51.65263104438782

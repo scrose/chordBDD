@@ -1,8 +1,0 @@
-Type: delay
-Time: Oct 9, 2018 at 4:35pm (PDT)
-Showing nodes accounting for 19.21s, 99.86% of 19.24s total
-Dropped 27 nodes (cum <= 0.10s)
-      flat  flat%   sum%        cum   cum%
-    10.25s 53.28% 53.28%     10.25s 53.28%  runtime.chanrecv1
-     8.96s 46.58% 99.86%      8.96s 46.58%  runtime.chansend1
-         0     0% 99.86%     19.20s 99.81%  main.baboon
